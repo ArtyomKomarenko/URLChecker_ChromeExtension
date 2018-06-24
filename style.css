@@ -1,0 +1,87 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    width: 500px;
+}
+
+.wrapper {
+    width: 96%;
+    margin: 0 auto;
+}
+td {
+    text-align: left;
+}
+th, td:last-child {
+    text-align: center;
+}
+th, td:first-child {
+    position: relative;
+}
+
+#parse, #send {
+    width: 45%;
+    margin-left: 15px;
+    margin-bottom: 15px;
+    margin-top: 7px;
+}
+
+#total, #error {
+    background-color: lightgray;
+    border-radius: 5px;
+    display: inline-block;
+    margin: -10px 0 5px 17px;
+    padding: 0 5px;
+}
+
+.table {
+    width: calc(100% - 10px);
+    margin-left:5px;
+}
+tr td {
+    word-break: break-all;
+}
+th {
+    background-color: whitesmoke;
+}
+
+.table tbody tr td.error {
+    background-color: #f2dede;
+}
+
+.fa-external-link {
+    font-size: 12px;
+    width: 0;
+    position: relative;
+    top: -5px;
+    left: 2px;
+}
+
+.fa-eye-slash, .fa-eye {
+    position: absolute;
+    right: 10px;
+}
+
+.fa-long-arrow-left	{
+    position: absolute;
+    right: 110px;
+}
+
+.fa-long-arrow-right {
+    position: absolute;
+    right: 60px;
+}
+
+a {
+    color: black;
+}
+
+textarea {
+    padding: 10px;
+}
+
+.form-group {
+    margin-top: 12px;
+}
