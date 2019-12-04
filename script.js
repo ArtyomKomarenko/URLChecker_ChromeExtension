@@ -29,12 +29,30 @@ $(function () {
                 self.addRow();
                 Table.addUrl(item, i)
             });
+            this.addMarkUrlListener();
         }
 
         static addResult(status, i) {
             const resultColumn = $(`tr:eq(${i + 1}) td:eq(1)`);
             resultColumn.html(status);
             Helper.setStatusColor(resultColumn, status);
+        }
+        
+        addMarkUrlListener() {
+            $('.url-column').click(function () {
+                const url = this.textContent;
+                chrome.tabs.executeScript(
+                    {
+                        code: `URLChecker_image = document.querySelector('[src="${url}"]');
+                URLChecker_link = document.querySelector('[href="${url}"]');
+                URLChecker_el = URLChecker_image || URLChecker_link;
+                if(URLChecker_el) {
+                    URLChecker_el.style.backgroundColor = 'yellow';
+                    URLChecker_el.focus();
+                }`
+                    }
+                );
+            });
         }
     }
 
