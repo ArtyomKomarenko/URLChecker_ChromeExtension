@@ -28,6 +28,21 @@ th, td:first-child {
     margin-top: 7px;
 }
 
+#search {
+    width: 20%;
+    margin-left: 15px;
+    margin-bottom: 15px;
+    margin-top: 7px;
+}
+
+#query {
+    width: 70%;
+    float: right;
+    margin-left: 15px;
+    margin-bottom: 15px;
+    margin-top: 7px;
+}
+
 #total, #error {
     background-color: lightgray;
     border-radius: 5px;
