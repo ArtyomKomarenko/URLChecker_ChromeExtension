@@ -10,18 +10,18 @@ $(function () {
         };
 
         addRow() {
-            this.tbody.append('<tr><td></td><td></td></tr>');
+            this.tbody.append('<tr><td class="url-column"></td><td></td></tr>');
         }
 
         static addUrl(item, i) {
             item = Helper.extractURL(item);
-            let urlColumn = `tr:eq(${i + 1}) td:eq(0)`;
-            $(urlColumn).html(`<a class="url-column" href="${item}" target="_blank">${item}</a>`);
+            const urlColumn = `tr:eq(${i + 1}) td:eq(0)`;
+            $(urlColumn).html(`<a href="${item}" target="_blank">${item}</a>`);
         }
 
         fillTable(arr) {
-            let self = this;
-            if (arr == null || arr.length ==  0) {
+            const self = this;
+            if (arr == null || arr.length === 0) {
                 self.tbody.append('<tr><td colspan="2">No matches</td></tr>');
                 return;
             }
@@ -32,7 +32,7 @@ $(function () {
         }
 
         static addResult(status, i) {
-            let resultColumn = $(`tr:eq(${i + 1}) td:eq(1)`);
+            const resultColumn = $(`tr:eq(${i + 1}) td:eq(1)`);
             resultColumn.html(status);
             Helper.setStatusColor(resultColumn, status);
         }
@@ -48,18 +48,24 @@ $(function () {
         };
 
         getBody() {
-            let self = this;
+            const self = this;
             chrome.tabs.executeScript(
                 {
                     code: "Array.from(document.getElementsByTagName('body')).map(el => el.innerHTML)"
-                }, function (results){
-                    if(results != undefined) self.text = results[0][0];
+                }, function (results) {
+                    if (results != undefined) self.text = results[0][0];
                 }
             );
         }
 
         getResult() {
             this.result = this.text.match(REGEX_SEARCH_URL) || [];
+        }
+
+        search() {
+            const query = $('#query')[0].value;
+            const re = new RegExp(`(href|src)="((?!#)[\\w\?\\/\.%=:&$#-]*${query}[\\w\?\\/\.%=:&$#-]*)"`, 'gmi');
+            this.result = this.text.match(re) || [];
         }
 
         fillCountOfResults(arr) {
@@ -75,7 +81,7 @@ $(function () {
         };
 
         sendRequest(target, i, callback) {
-            //let self = this;
+            //const self = this;
             chrome.tabs.executeScript(
                 {
                     code: `$.get("${target}", function (data, success, obj) {
@@ -92,7 +98,7 @@ $(function () {
         }
 
         sendRequests(arr, callback) {
-            let self = this;
+            const self = this;
             arr.forEach(function (item, i) {
                 item = Helper.extractURL(item);
                 self.sendRequest(item, i, callback)
@@ -100,8 +106,8 @@ $(function () {
         }
 
         getCurrentURLScheme() {
-            let self = this;
-            chrome.tabs.getSelected(null,function(tab) {
+            const self = this;
+            chrome.tabs.getSelected(null, function (tab) {
                 self.currentURLScheme = tab.url.match(/https?/i)[0];
             });
         }
@@ -140,14 +146,14 @@ $(function () {
         }
     }
 
-    let table = new Table();
-    let checker = new Checker();
-    let result = new Result();
+    const table = new Table();
+    const checker = new Checker();
+    const result = new Result();
 
     $('#parse').click(function () {
         result.getResult();
 
-        let res = result.result;
+        const res = result.result;
 
         result.total.empty();
         table.tbody.empty();
@@ -158,8 +164,20 @@ $(function () {
 
     $('#send').click(function () {
 
-        let res = result.result;
+        const res = result.result;
 
         checker.sendRequests(res, Table.addResult)
-    })
+    });
+
+    $('#search').click(function () {
+        result.search();
+
+        const res = result.result;
+
+        result.total.empty();
+        table.tbody.empty();
+
+        table.fillTable(res);
+        result.fillCountOfResults(res);
+    });
 });
